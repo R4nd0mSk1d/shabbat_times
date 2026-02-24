@@ -111,7 +111,7 @@ def run():
                 page.close()
 
                 if not parsha_name:
-                    parsha_name = data["parsha"]
+                    parsha_name = data["parsha"].replace("שבת", "פרשת", 1)
 
                 write_place_times(place_en, data)
 
@@ -135,3 +135,4 @@ def run():
 
 if __name__ == "__main__":
     run()
+
