@@ -1,6 +1,8 @@
 import time
 from pathlib import Path
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+from datetime import datetime
+
 
 BASE_URL = "https://www.yeshiva.org.il/calendar/shabatot?place="
 
@@ -69,7 +71,10 @@ def fetch_place_data(page, place_he):
 
 def write_place_times(place_en, data):
     slug = place_en.lower()
+    today = datetime.now().strftime("%d/%m/%Y")
+
     content = (
+        f"{today}\n"
         f"הנץ החמה - {data['netz']}\n"
         f"חצות היום - {data['chatzot']}\n"
         f"שקיעה - {data['shkiah']}\n"
