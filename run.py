@@ -85,7 +85,7 @@ def write_place_times(place_en, data):
 
 
 def write_shabbat_times(parsha, lines):
-    content = "Shabbat Shalom 🌹\n" + parsha + "\n" + "\n".join(lines) + "\n"
+    content = "Shabbat Shalom\n" + parsha + "\n" + "\n".join(lines) + "\n"
     (OUT_DIR / "shabbat_times.txt").write_text(content, encoding="utf-8")
 
 
@@ -135,5 +135,6 @@ def run():
 
 if __name__ == "__main__":
     run()
+
 
 
