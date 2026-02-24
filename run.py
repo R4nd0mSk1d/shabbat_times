@@ -84,8 +84,14 @@ def write_place_times(place_en, data):
     (OUT_DIR / f"{slug}_times.txt").write_text(content, encoding="utf-8")
 
 
+LRM = "\u200E"  # Left‑to‑Right mark
+
 def write_shabbat_times(parsha, lines):
-    content = "Shabbat Shalom\n" + parsha + "\n" + "\n".join(lines) + "\n"
+    content = (
+        f"{LRM}{parsha}\n" +
+        "\n".join(f"{LRM}{line}" for line in lines) +
+        "\n"
+    )
     (OUT_DIR / "shabbat_times.txt").write_text(content, encoding="utf-8")
 
 
@@ -135,6 +141,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-
-
-
