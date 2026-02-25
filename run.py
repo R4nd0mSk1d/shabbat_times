@@ -63,7 +63,9 @@ def fetch_place_data(page, place_he):
                 chatzot: getTime("חצות היום"),
                 shkiah: getTime("שקיעה"),
                 tzet: getTime("צאת הכוכבים"),
-                chatzotLayla: getTime("חצות הלילה")
+                chatzotLayla: getTime("חצות הלילה"),
+                shaharitEnd: getTime('סוף זמן תפילה לגר"א'),
+                alotHaShahar: getTime('עלות השחר 72 דקות'),
             };
         }
     """)
@@ -72,6 +74,13 @@ def fetch_place_data(page, place_he):
 def write_place_times(place_en, data):
     slug = place_en.lower()
     today = datetime.now().strftime("%d/%m/%Y")
+
+    # todo format:
+    #  shaharit: netz - shaharitEnd
+    #  shaharit Bediavad: shaharitEnd - chatzot
+    #  minha - chatzot + 30 - shkiah
+    #  arvit - tzet - chatzotLayla
+    #  arvit bediavad: chatzotLayla - alotHaShahar
 
     content = (
         f"{today}\n"
@@ -115,6 +124,8 @@ def run():
                 page = context.new_page()
                 data = fetch_place_data(page, place_he)
                 page.close()
+
+                print(data)
 
                 if not parsha_name:
                     parsha_name = data["parsha"].replace("שבת", "פרשת", 1)
