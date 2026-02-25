@@ -2,7 +2,7 @@ name: Shabbat Times
 
 on:
   schedule:
-    - cron: "0 2 * * *"   # 04:00 UTC daily
+    - cron: "17,39 2,3 * * *"  
   workflow_dispatch:
 
 permissions:
