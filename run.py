@@ -139,7 +139,7 @@ def run():
 
                 if place_en in SHABBAT_PLACES:
                     shabbat_lines.append(
-                        f"{data['shabatIn']} - {data['shabatOut']}  {place_he}"
+                        f"{data['shabatIn']} - {data['shabatOut']} - ({place_he})"
                     )
 
             except PlaywrightTimeoutError:
