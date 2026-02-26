@@ -13,6 +13,13 @@ PLACES = [
     ("הרצליה", "Herzliya"),
 ]
 
+SHABBAT_PLACES = [
+    "Tiberias",
+    "Jerusalem",
+    "Haifa",
+]
+
+
 OUT_DIR = Path(".")
 
 
@@ -93,12 +100,10 @@ def write_place_times(place_en, data):
     (OUT_DIR / f"{slug}_times.txt").write_text(content, encoding="utf-8")
 
 
-LRM = "\u200E"  # Left‑to‑Right mark
-
 def write_shabbat_times(parsha, lines):
     content = (
-        f"{LRM}{parsha}\n" +
-        "\n".join(f"{LRM}{line}" for line in lines) +
+        f"{parsha}\n" +
+        "\n".join(f"{line}" for line in lines) +
         "\n"
     )
     (OUT_DIR / "shabbat_times.txt").write_text(content, encoding="utf-8")
@@ -132,9 +137,10 @@ def run():
 
                 write_place_times(place_en, data)
 
-                shabbat_lines.append(
-                    f"{data['shabatIn']} - {data['shabatOut']} {place_en}"
-                )
+                if place_en in SHABBAT_PLACES:
+                    shabbat_lines.append(
+                        f"{data['shabatIn']} - {data['shabatOut']}  {place_he}"
+                    )
 
             except PlaywrightTimeoutError:
                 print(f"Timeout fetching data for {place_he}")
