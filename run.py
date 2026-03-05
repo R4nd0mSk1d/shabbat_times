@@ -49,6 +49,9 @@ def fetch_place_data(page, place_he):
     url = BASE_URL + place_he
     page.goto(url)
     page.wait_for_function("() => window.defaultLayoutData !== undefined", timeout=15000)
+    page.wait_for_selector("#cur-parsha-box h2")
+    page.wait_for_selector("#shabat_in > span.ng-binding")
+    page.wait_for_selector("#shabat_out > span.ng-binding")
 
     return page.evaluate("""
         () => {
@@ -61,11 +64,14 @@ def fetch_place_data(page, place_he):
 
             const getShabatTime = (name) =>
                 shabat.times.find(t => t.name === name)?.value;
+                
+            const getText = (selector) =>
+                document.querySelector(selector)?.innerText.trim();
 
             return {
-                parsha: shabat.shabat_prefix + " " + shabat.shabat_name,
-                shabatIn: getShabatTime("כניסת שבת"),
-                shabatOut: getShabatTime("צאת שבת"),
+                parsha: getText("#cur-parsha-box h2"),
+                shabatIn: getText("#shabat_in > span.ng-binding"),
+                shabatOut: getText("#shabat_out > span.ng-binding"),
                 netz: getTime("הנץ החמה"),
                 chatzot: getTime("חצות היום"),
                 shkiah: getTime("שקיעה"),
@@ -122,13 +128,14 @@ def run():
         browser = p.chromium.launch(headless=True)
 
         user_agent = get_user_agent(browser)
-        context = create_context(browser, user_agent)
 
         for place_he, place_en in PLACES:
             try:
+                context = create_context(browser, user_agent)
                 page = context.new_page()
                 data = fetch_place_data(page, place_he)
                 page.close()
+                context.close()
 
                 print(data)
 
@@ -147,7 +154,6 @@ def run():
             except Exception as e:
                 print(f"Error fetching {place_he}: {e}")
 
-        context.close()
         browser.close()
 
     if parsha_name and shabbat_lines:
